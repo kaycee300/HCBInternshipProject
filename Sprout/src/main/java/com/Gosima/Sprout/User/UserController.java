@@ -1,6 +1,7 @@
 package com.Gosima.Sprout.User;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserController {
         return userService.CreateUser(account);
     }
 
+    @PreAuthorize("hasAuthority('MANAGE_USER')")
     @GetMapping
     public List<Account> findAll(){
         return userService.getUsers();

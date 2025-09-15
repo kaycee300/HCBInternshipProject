@@ -1,5 +1,6 @@
 package com.Gosima.Sprout.User;
 
+import com.Gosima.Sprout.Carts.Cart;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,8 +13,8 @@ import java.util.List;
 public class Account implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String name;
@@ -30,6 +31,12 @@ public class Account implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+
+    @OneToOne(cascade = CascadeType.ALL)  /*mappedBy = "user", */
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
+
     @Column(nullable = false)
 //    @Enumerated(EnumType.STRING)
     private  Role role;
@@ -38,7 +45,7 @@ public class Account implements UserDetails {
     public Account() {
     }
 
-    public Account(int id, Role role, String password, int phoneNo, String address, String email, String name) {
+    public Account(Long id, Role role, String password, int phoneNo, String address, String email, String name) {
         this.id = id;
         this.role = role;
         this.password = password;
@@ -48,13 +55,17 @@ public class Account implements UserDetails {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
+
+
+    public Cart getCart() { return cart; }
+    public void setCart(Cart cart) { this.cart = cart; }
 
 
     public String getName() {
